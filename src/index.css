@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Press Start 2P', system-ui;
+  }
+}
+
+/* Make the app container transparent */
+#root {
+  background: transparent;
+}
+
+/* Custom scrollbar for overlay */
+.overlay-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overlay-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overlay-scrollbar::-webkit-scrollbar-thumb {
+  background: #4B5563;
+  border-radius: 3px;
+}
+
+.overlay-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #374151;
+}
