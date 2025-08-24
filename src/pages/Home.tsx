@@ -11,7 +11,7 @@ const Home = () => {
       <div className="text-center mb-8">
         <div className="flex justify-center mb-4">
           <img 
-            src="/src/assets/focuslog.png"
+            src="./src/assets/focuslog.png"
             alt="FocuzStreak"
             className="w-24 h-24"
           />

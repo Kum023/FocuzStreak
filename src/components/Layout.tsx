@@ -13,7 +13,7 @@ const Layout = () => {
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-4">
             <img 
-              src="/src/assets/focuslog.png"
+              src="./src/assets/focuslog.png"
               alt="FocuzStreak"
               className="w-10 h-10"
             />

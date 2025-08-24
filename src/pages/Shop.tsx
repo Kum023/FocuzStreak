@@ -11,7 +11,7 @@ const Shop = () => {
       name: "Lion Hat Style 1",
       description: "A classic hat for your lion companion",
       price: 100,
-      image: "/src/assets/lion_hat_1_scaled_10x_pngcrushed.png",
+              image: "./src/assets/lion_hat_1_scaled_10x_pngcrushed.png",
       category: "Cosmetic"
     },
     {
@@ -19,7 +19,7 @@ const Shop = () => {
       name: "Lion Hat Style 2",
       description: "Give your lion a stylish new look",
       price: 200,
-      image: "/src/assets/lion_hat_2_scaled_10x_pngcrushed.png",
+              image: "./src/assets/lion_hat_2_scaled_10x_pngcrushed.png",
       category: "Cosmetic"
     },
     {
@@ -27,7 +27,7 @@ const Shop = () => {
       name: "Lion Hat Style 3",
       description: "Premium hat for your focused companion",
       price: 150,
-      image: "/src/assets/lion_hat_3_scaled_10x_pngcrushed.png",
+              image: "./src/assets/lion_hat_3_scaled_10x_pngcrushed.png",
       category: "Cosmetic"
     }
   ];

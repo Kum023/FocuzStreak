@@ -45,8 +45,8 @@ const AnimatedLion = () => {
       <div className="relative">
         <img 
           src={showSadLion 
-            ? "/src/assets/lion_sad_1_scaled_10x_minified (1).gif"
-            : "/src/assets/lion_idle_scaled_10x_minified.gif"
+            ? "./src/assets/lion_sad_1_scaled_10x_minified (1).gif"
+            : "./src/assets/lion_idle_scaled_10x_minified.gif"
           }
           alt="Animated Lion"
           className="w-48 h-48 object-contain"
