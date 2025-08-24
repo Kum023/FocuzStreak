@@ -11,8 +11,6 @@ FocuzStreak is an innovative browser extension that uses AI-powered eye tracking
 - Pixel Perfect Design: Retro-styled UI with modern functionality
 - Cross-browser Support: Works on Chrome, Firefox, and Edge
 
-🌐 **Live Site**: [https://kum023.github.io/FocuzStreak/](https://kum023.github.io/FocuzStreak/)
-
 🚀 How to install
 
 1. Clone the repository:
@@ -42,6 +40,15 @@ npm run build:extension
 - Enable developer mode
 - Click "Load unpacked"
 - Select the `dist` folder
+
+## 🌐 Live Demo
+
+**FocuzStreak is now live!** 🎉
+
+- **GitHub Pages**: [https://kum023.github.io/FocuzStreak/](https://kum023.github.io/FocuzStreak/)
+- **Repository**: [https://github.com/Kum023/FocuzStreak](https://github.com/Kum023/FocuzStreak)
+
+The app automatically deploys to GitHub Pages whenever you push to the main branch!
 
 Tech Stack
 
