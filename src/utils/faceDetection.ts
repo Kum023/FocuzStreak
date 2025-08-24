@@ -160,7 +160,7 @@ export const isPupilLookingAway = (
 export const playAlertSound = () => {
   if (activeAudio) return;
   
-  const audio = new Audio('/src/assets/alarm-327234.mp3');
+  const audio = new Audio('./src/assets/alarm-327234.mp3');
   audio.loop = true;
   audio.volume = 0.5;
 
@@ -197,7 +197,7 @@ export const playFaceNotDetectedSound = () => {
     });
   } else {
     // Create new audio element for face not detected sound
-    const audio = new Audio('/src/assets/alarm-327234.mp3');
+    const audio = new Audio('./src/assets/alarm-327234.mp3');
     audio.volume = 0.3; // Lower volume for face not detected
     audio.play().catch(error => {
       console.error('Error playing face not detected sound:', error);

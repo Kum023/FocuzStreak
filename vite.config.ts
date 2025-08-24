@@ -3,12 +3,11 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/FocuzStreak/', // GitHub Pages base path
+  base: '/FocuzStreak/',
   build: {
     rollupOptions: {
       input: {
-        main: 'index.html',
-        content: 'src/content.tsx'
+        main: 'index.html'
       },
       output: {
         entryFileNames: '[name].js',
