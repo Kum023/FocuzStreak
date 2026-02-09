@@ -1,17 +1,20 @@
-import React from 'react';
-import { AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { AlertCircle, Target } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import FaceMonitor from '../components/FaceMonitor';
+import Calibration from '../components/Calibration';
+import focuslogImg from '../assets/focuslog.png';
 
 const Home = () => {
-  const { isModelLoaded } = useAppContext();
+  const { isModelLoaded, isCalibrated, setIsCalibrated } = useAppContext();
+  const [showCalibration, setShowCalibration] = useState(false);
   
   return (
     <div className="space-y-6">
       <div className="text-center mb-8">
         <div className="flex justify-center mb-4">
           <img 
-            src="./src/assets/focuslog.png"
+            src={focuslogImg}
             alt="FocuzStreak"
             className="w-24 h-24"
           />
@@ -39,6 +42,36 @@ const Home = () => {
       )}
 
       <FaceMonitor />
+      
+      {/* Calibration Section */}
+      <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-md">
+        <div className="flex items-start justify-between">
+          <div className="flex items-start">
+            <Target className="w-5 h-5 text-blue-500 mr-2 mt-0.5" />
+            <div>
+              <p className="font-medium text-blue-800 font-['Press_Start_2P'] text-[10px]">
+                {isCalibrated ? 'Calibration Complete' : 'Calibration Required'}
+              </p>
+              <p className="text-blue-700 text-[10px] font-['Press_Start_2P'] mt-2 leading-relaxed">
+                {isCalibrated 
+                  ? 'Your gaze detection is calibrated for better accuracy.'
+                  : 'Calibrate your gaze detection for improved accuracy. This helps the AI understand your eye movement patterns.'
+                }
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowCalibration(true)}
+            className={`px-4 py-2 rounded-md text-[10px] font-['Press_Start_2P'] transition-colors ${
+              isCalibrated 
+                ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
+                : 'bg-blue-500 text-white hover:bg-blue-600'
+            }`}
+          >
+            {isCalibrated ? 'Recalibrate' : 'Calibrate'}
+          </button>
+        </div>
+      </div>
       
       <div className="mt-8 bg-[#fffaee] rounded-lg shadow-md p-6">
         <h2 className="text-lg font-semibold text-black mb-6 font-['Press_Start_2P']">How It Works</h2>
@@ -68,6 +101,17 @@ const Home = () => {
           </div>
         </div>
       </div>
+      
+      {/* Calibration Modal */}
+      {showCalibration && (
+        <Calibration
+          onComplete={(data) => {
+            setShowCalibration(false);
+            setIsCalibrated(true);
+          }}
+          onCancel={() => setShowCalibration(false)}
+        />
+      )}
     </div>
   );
 };

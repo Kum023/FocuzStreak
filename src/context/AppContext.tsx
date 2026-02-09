@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { loadModel } from '../utils/faceDetection';
+import { loadModel, getCalibrationStatus } from '../utils/faceDetection';
 
 interface AppContextType {
   isModelLoaded: boolean;
@@ -11,6 +11,8 @@ interface AppContextType {
   setAlertTimeout: (value: number) => void;
   isFacingAway: boolean;
   setIsFacingAway: (value: boolean) => void;
+  isCalibrated: boolean;
+  setIsCalibrated: (value: boolean) => void;
   focusStats: {
     totalTime: number;
     focusedTime: number;
@@ -37,6 +39,8 @@ const defaultContext: AppContextType = {
   setAlertTimeout: () => {},
   isFacingAway: false,
   setIsFacingAway: () => {},
+  isCalibrated: false,
+  setIsCalibrated: () => {},
   focusStats: {
     totalTime: 0,
     focusedTime: 0,
@@ -67,6 +71,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const [sensitivity, setSensitivity] = useState(0.8);
   const [alertTimeout, setAlertTimeout] = useState(2000);
   const [isFacingAway, setIsFacingAway] = useState(false);
+  const [isCalibrated, setIsCalibrated] = useState(false);
   const [equippedHat, setEquippedHat] = useState<string | null>(null);
   const [purchasedHats, setPurchasedHats] = useState<string[]>([]);
   const [maintainFocusState, setMaintainFocusState] = useState(true);
@@ -82,6 +87,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       try {
         await loadModel();
         setIsModelLoaded(true);
+        
+        // Check calibration status
+        const { isCalibrated: calibrated } = getCalibrationStatus();
+        setIsCalibrated(calibrated);
       } catch (error) {
         console.error('Failed to load face detection model:', error);
       }
@@ -151,6 +160,8 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         setAlertTimeout,
         isFacingAway,
         setIsFacingAway,
+        isCalibrated,
+        setIsCalibrated,
         focusStats,
         resetStats,
         equippedHat,

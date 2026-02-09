@@ -8,9 +8,20 @@ let lastFaceNotDetectedTime = 0;
 const DETECTION_INTERVAL = 50;
 const FACE_NOT_DETECTED_INTERVAL = 1000; // Beep every 1 second when face not detected
 
+// Calibration data
+let calibrationData: CalibrationData | null = null;
+let isCalibrated = false;
+
+// Smoothing and filtering
+let gazeHistory: GazeData[] = [];
+const HISTORY_LENGTH = 10;
+let confidenceThreshold = 0.6;
+let adaptiveThreshold = 0.8;
+
 interface GazeData {
   x: number;
   y: number;
+  confidence?: number;
 }
 
 interface FaceBox {
@@ -18,6 +29,18 @@ interface FaceBox {
   y: number;
   width: number;
   height: number;
+}
+
+export interface CalibrationData {
+  center: GazeData;
+  left: GazeData;
+  right: GazeData;
+  top: GazeData;
+  bottom: GazeData;
+  screenBounds: {
+    width: number;
+    height: number;
+  };
 }
 
 export const loadModel = async () => {
@@ -104,21 +127,27 @@ export const detectFace = async () => {
 
     const faceFeatures = webgazer.getTracker().getPositions();
     const faceDetected = faceFeatures && faceFeatures.length > 0;
+    const confidence = prediction.confidence || 0.5;
+    const gazeData: GazeData = {
+      x: prediction.x,
+      y: prediction.y,
+      confidence
+    };
 
     if (!faceDetected) {
-      // Face features not detected - play beep sound
       playFaceNotDetectedSound();
     } else {
-      // Face detected - stop the beep sound
       stopFaceNotDetectedSound();
+      gazeHistory.push(gazeData);
+      if (gazeHistory.length > HISTORY_LENGTH) {
+        gazeHistory.shift();
+      }
     }
 
     return {
-      gazeData: {
-        x: prediction.x,
-        y: prediction.y
-      },
+      gazeData,
       faceDetected,
+      confidence,
       timestamp: currentTime
     };
   } catch (error) {
@@ -129,32 +158,147 @@ export const detectFace = async () => {
   }
 };
 
+// Smooth gaze data using weighted average
+const smoothGazeData = (gazeHistory: GazeData[]): GazeData => {
+  if (gazeHistory.length === 0) return { x: 0, y: 0 };
+  
+  let totalWeight = 0;
+  let weightedX = 0;
+  let weightedY = 0;
+  let totalConfidence = 0;
+
+  gazeHistory.forEach((gaze, index) => {
+    const weight = index + 1; // More recent data has higher weight
+    const confidence = gaze.confidence || 0.5;
+    
+    weightedX += gaze.x * weight * confidence;
+    weightedY += gaze.y * weight * confidence;
+    totalWeight += weight * confidence;
+    totalConfidence += confidence;
+  });
+
+  return {
+    x: weightedX / totalWeight,
+    y: weightedY / totalWeight,
+    confidence: totalConfidence / gazeHistory.length
+  };
+};
+
+// Calculate distance between two points
+const calculateDistance = (point1: GazeData, point2: GazeData): number => {
+  return Math.sqrt(Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2));
+};
+
+// Check if gaze is within calibrated bounds
+const isWithinCalibratedBounds = (gazeData: GazeData): boolean => {
+  if (!calibrationData || !isCalibrated) {
+    // Fallback to screen bounds if not calibrated
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    return gazeData.x >= 0 && gazeData.x <= windowWidth && 
+           gazeData.y >= 0 && gazeData.y <= windowHeight;
+  }
+
+  // Use calibrated bounds with some tolerance
+  const tolerance = 100; // pixels
+  const bounds = calibrationData.screenBounds;
+  
+  return gazeData.x >= -tolerance && 
+         gazeData.x <= bounds.width + tolerance && 
+         gazeData.y >= -tolerance && 
+         gazeData.y <= bounds.height + tolerance;
+};
+
+// Adaptive threshold based on user behavior
+const updateAdaptiveThreshold = (confidence: number, isLookingAway: boolean) => {
+  if (isLookingAway && confidence > adaptiveThreshold) {
+    // If we think they're looking away but confidence is high, lower threshold
+    adaptiveThreshold = Math.max(0.3, adaptiveThreshold - 0.05);
+  } else if (!isLookingAway && confidence < adaptiveThreshold) {
+    // If we think they're looking at screen but confidence is low, raise threshold
+    adaptiveThreshold = Math.min(0.95, adaptiveThreshold + 0.02);
+  }
+};
+
 export const isPupilLookingAway = (
-  predictions: { gazeData: GazeData | null, faceDetected: boolean } | null
+  predictions: { gazeData: GazeData | null, faceDetected: boolean, confidence?: number } | null,
+  sensitivity: number = 0.8
 ): boolean => {
   if (!predictions || !predictions.faceDetected || !predictions.gazeData) {
     return true;
   }
 
-  const windowWidth = window.innerWidth;
-  const windowHeight = window.innerHeight;
+  // Smooth the gaze data
+  const smoothedGaze = smoothGazeData(gazeHistory);
+  
+  // Check confidence threshold
+  const confidence = predictions.confidence || 0.5;
+  if (confidence < confidenceThreshold) {
+    return true; // Low confidence means we can't trust the prediction
+  }
 
-  const gazeX = predictions.gazeData.x;
-  const gazeY = predictions.gazeData.y;
+  // Check if within calibrated bounds
+  const withinBounds = isWithinCalibratedBounds(smoothedGaze);
+  
+  // Apply sensitivity adjustment
+  const adjustedThreshold = adaptiveThreshold * sensitivity;
+  const isLookingAway = !withinBounds || confidence < adjustedThreshold;
+  
+  // Update adaptive threshold
+  updateAdaptiveThreshold(confidence, isLookingAway);
 
-  const isWithinScreen = 
-    gazeX >= 0 &&
-    gazeX <= windowWidth &&
-    gazeY >= 0 &&
-    gazeY <= windowHeight;
-
-  if (!isWithinScreen && !activeAudio) {
+  // Handle audio alerts
+  if (isLookingAway && !activeAudio) {
     playAlertSound();
-  } else if (isWithinScreen && activeAudio) {
+  } else if (!isLookingAway && activeAudio) {
     stopAlertSound();
   }
 
-  return !isWithinScreen;
+  return isLookingAway;
+};
+
+// Calibration functions
+export const startCalibration = () => {
+  isCalibrated = false;
+  calibrationData = null;
+  gazeHistory = [];
+};
+
+export const addCalibrationPoint = (position: 'center' | 'left' | 'right' | 'top' | 'bottom') => {
+  if (!calibrationData) {
+    calibrationData = {
+      center: { x: 0, y: 0 },
+      left: { x: 0, y: 0 },
+      right: { x: 0, y: 0 },
+      top: { x: 0, y: 0 },
+      bottom: { x: 0, y: 0 },
+      screenBounds: {
+        width: window.innerWidth,
+        height: window.innerHeight
+      }
+    };
+  }
+
+  // Get current gaze data
+  const currentGaze = gazeHistory[gazeHistory.length - 1];
+  if (currentGaze) {
+    calibrationData[position] = { ...currentGaze };
+  }
+};
+
+export const completeCalibration = () => {
+  if (calibrationData) {
+    isCalibrated = true;
+    console.log('Calibration completed:', calibrationData);
+  }
+};
+
+export const getCalibrationStatus = () => {
+  return { isCalibrated, calibrationData };
+};
+
+export const setConfidenceThreshold = (threshold: number) => {
+  confidenceThreshold = Math.max(0.1, Math.min(0.9, threshold));
 };
 
 export const playAlertSound = () => {
@@ -221,4 +365,7 @@ export const cleanup = () => {
   }
   stopAlertSound();
   stopFaceNotDetectedSound();
+  gazeHistory = [];
+  isCalibrated = false;
+  calibrationData = null;
 };

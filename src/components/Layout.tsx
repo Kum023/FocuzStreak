@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Eye, BarChart2, Settings, ShoppingBag } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import focuslogImg from '../assets/focuslog.png';
 
 const Layout = () => {
   const location = useLocation();
@@ -13,7 +14,7 @@ const Layout = () => {
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-4">
             <img 
-              src="./src/assets/focuslog.png"
+              src={focuslogImg}
               alt="FocuzStreak"
               className="w-10 h-10"
             />

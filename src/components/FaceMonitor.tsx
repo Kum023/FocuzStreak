@@ -16,7 +16,8 @@ const FaceMonitor = () => {
     isMonitoring, 
     setIsMonitoring,
     setIsFacingAway,
-    maintainFocusState
+    maintainFocusState,
+    sensitivity
   } = useAppContext();
 
   const isMonitorPage = location.pathname === '/';
@@ -73,7 +74,7 @@ const FaceMonitor = () => {
       const predictions = await detectFace();
       
       if (predictions) {
-        const isAway = isPupilLookingAway(predictions);
+        const isAway = isPupilLookingAway(predictions, sensitivity);
         setLookingAway(isAway);
         setIsFacingAway(isAway);
       }

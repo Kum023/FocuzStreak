@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext';
+import lionIdle from '../assets/lion_idle_scaled_10x_minified.gif';
+import lionSad from '../assets/lion_sad_1_scaled_10x_minified (1).gif';
 
 const AnimatedLion = () => {
   const { isFacingAway, equippedHat } = useAppContext();
@@ -44,10 +46,7 @@ const AnimatedLion = () => {
     <div className="fixed bottom-4 right-4 z-50 pointer-events-none">
       <div className="relative">
         <img 
-          src={showSadLion 
-            ? "./src/assets/lion_sad_1_scaled_10x_minified (1).gif"
-            : "./src/assets/lion_idle_scaled_10x_minified.gif"
-          }
+          src={showSadLion ? lionSad : lionIdle}
           alt="Animated Lion"
           className="w-48 h-48 object-contain"
         />

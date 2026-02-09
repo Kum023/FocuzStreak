@@ -1,46 +1,65 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Check } from 'lucide-react';
+import { startCalibration, addCalibrationPoint, completeCalibration, detectFace } from '../utils/faceDetection';
 
 interface CalibrationProps {
-  onComplete: (calibrationData: CalibrationData) => void;
+  onComplete: (calibrationData: any) => void;
   onCancel: () => void;
-}
-
-export interface CalibrationData {
-  leftBound: number;
-  rightBound: number;
-  topBound: number;
-  bottomBound: number;
 }
 
 const Calibration = ({ onComplete, onCancel }: CalibrationProps) => {
   const [step, setStep] = useState(0);
-  const [calibrationData, setCalibrationData] = useState<Partial<CalibrationData>>({});
+  const [isCollecting, setIsCollecting] = useState(false);
   const timeoutRef = useRef<number>();
+  const collectionTimeoutRef = useRef<number>();
   
   const steps = [
-    { direction: 'center', icon: Check, text: 'Look at the center of the screen' },
-    { direction: 'left', icon: ArrowLeft, text: 'Look at the left edge of your screen' },
-    { direction: 'right', icon: ArrowRight, text: 'Look at the right edge of your screen' },
-    { direction: 'up', icon: ArrowUp, text: 'Look at the top of your screen' },
-    { direction: 'down', icon: ArrowDown, text: 'Look at the bottom of your screen' }
+    { direction: 'center', icon: Check, text: 'Look at the center of the screen', duration: 3000 },
+    { direction: 'left', icon: ArrowLeft, text: 'Look at the left edge of your screen', duration: 3000 },
+    { direction: 'right', icon: ArrowRight, text: 'Look at the right edge of your screen', duration: 3000 },
+    { direction: 'top', icon: ArrowUp, text: 'Look at the top of your screen', duration: 3000 },
+    { direction: 'bottom', icon: ArrowDown, text: 'Look at the bottom of your screen', duration: 3000 }
   ];
 
   useEffect(() => {
+    // Start calibration process
+    startCalibration();
+  }, []);
+
+  useEffect(() => {
     if (step < steps.length) {
+      const currentStep = steps[step];
+      
+      // Wait a bit before starting to collect data
       timeoutRef.current = window.setTimeout(() => {
-        setStep(prev => prev + 1);
-      }, 3000);
+        setIsCollecting(true);
+        
+        // Collect data for the specified duration
+        collectionTimeoutRef.current = window.setTimeout(() => {
+          setIsCollecting(false);
+          
+          // Add the calibration point
+          addCalibrationPoint(currentStep.direction as any);
+          
+          // Move to next step
+          setStep(prev => prev + 1);
+        }, currentStep.duration);
+      }, 1000);
     } else {
-      onComplete(calibrationData as CalibrationData);
+      // Calibration complete
+      completeCalibration();
+      onComplete({ success: true });
     }
 
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
+      if (collectionTimeoutRef.current) {
+        clearTimeout(collectionTimeoutRef.current);
+      }
     };
-  }, [step, calibrationData, onComplete]);
+  }, [step, onComplete]);
 
   const currentStep = steps[step];
   
@@ -57,13 +76,19 @@ const Calibration = ({ onComplete, onCancel }: CalibrationProps) => {
         
         <div className="flex flex-col items-center justify-center space-y-6">
           <div className={`w-20 h-20 rounded-full flex items-center justify-center
-            ${step === 0 ? 'bg-green-100' : 'bg-blue-100'}`}>
-            <Icon className={`w-10 h-10 ${step === 0 ? 'text-green-600' : 'text-blue-600'}`} />
+            ${isCollecting ? 'bg-green-100 animate-pulse' : 'bg-blue-100'}`}>
+            <Icon className={`w-10 h-10 ${isCollecting ? 'text-green-600' : 'text-blue-600'}`} />
           </div>
           
           <p className="text-lg text-gray-700 text-center">
             {currentStep.text}
           </p>
+          
+          {isCollecting && (
+            <div className="text-sm text-green-600 font-medium">
+              Collecting data... Please keep your head still and only move your eyes
+            </div>
+          )}
           
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
@@ -72,8 +97,8 @@ const Calibration = ({ onComplete, onCancel }: CalibrationProps) => {
             />
           </div>
           
-          <p className="text-sm text-gray-500">
-            Please keep your head still and only move your eyes
+          <p className="text-sm text-gray-500 text-center">
+            Step {step + 1} of {steps.length}
           </p>
         </div>
         

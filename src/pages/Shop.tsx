@@ -1,35 +1,17 @@
 import React from 'react';
 import { useAppContext } from '../context/AppContext';
 import { ShoppingBag, Star, Award } from 'lucide-react';
+import hat1 from '../assets/lion_hat_1_scaled_10x_pngcrushed.png';
+import hat2 from '../assets/lion_hat_2_scaled_10x_pngcrushed.png';
+import hat3 from '../assets/lion_hat_3_scaled_10x_pngcrushed.png';
 
 const Shop = () => {
   const { focusStats, equipHat, deductPoints, equippedHat, purchasedHats, purchaseHat } = useAppContext();
 
   const items = [
-    {
-      id: 1,
-      name: "Lion Hat Style 1",
-      description: "A classic hat for your lion companion",
-      price: 100,
-              image: "./src/assets/lion_hat_1_scaled_10x_pngcrushed.png",
-      category: "Cosmetic"
-    },
-    {
-      id: 2,
-      name: "Lion Hat Style 2",
-      description: "Give your lion a stylish new look",
-      price: 200,
-              image: "./src/assets/lion_hat_2_scaled_10x_pngcrushed.png",
-      category: "Cosmetic"
-    },
-    {
-      id: 3,
-      name: "Lion Hat Style 3",
-      description: "Premium hat for your focused companion",
-      price: 150,
-              image: "./src/assets/lion_hat_3_scaled_10x_pngcrushed.png",
-      category: "Cosmetic"
-    }
+    { id: 1, name: "Lion Hat Style 1", description: "A classic hat for your lion companion", price: 100, image: hat1, category: "Cosmetic" },
+    { id: 2, name: "Lion Hat Style 2", description: "Give your lion a stylish new look", price: 200, image: hat2, category: "Cosmetic" },
+    { id: 3, name: "Lion Hat Style 3", description: "Premium hat for your focused companion", price: 150, image: hat3, category: "Cosmetic" }
   ];
 
   const handlePurchase = (item: typeof items[0]) => {
