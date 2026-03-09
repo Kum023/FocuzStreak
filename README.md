@@ -43,7 +43,7 @@ npm run build:extension
 
 **To run it again after code changes:** run `npm run build:extension` again, then go to `chrome://extensions` and click the refresh icon on the FocuzStreak card.
 
-## 🌐 Use it directly (live)
+## 🌐 Use it directly (live, no install)
 
 **Anyone can use FocuzStreak in the browser — no install needed.**
 
