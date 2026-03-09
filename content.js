@@ -1,0 +1,1 @@
+import{c as n,j as t,M as o,A as i}from"./index.js";const e=document.createElement("div");e.id="focuzstreak-extension-root";document.body.appendChild(e);n(e).render(t.jsx(o,{initialEntries:["/"],initialIndex:0,children:t.jsx(i,{})}));
