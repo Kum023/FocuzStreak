@@ -12,6 +12,7 @@ const OverlayMode: React.FC<OverlayModeProps> = ({ children }) => {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(false);
 
+  // Track viewport size so we know when to switch to a mobile layout.
   useEffect(() => {
     const check = () => {
       if (typeof window !== 'undefined') {
@@ -23,12 +24,12 @@ const OverlayMode: React.FC<OverlayModeProps> = ({ children }) => {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // On mobile, render a normal full-page layout without the draggable overlay shell.
-  if (isMobile) {
-    return <>{children}</>;
-  }
-
   useEffect(() => {
+    if (isMobile) {
+      // Don't attach desktop drag handlers on mobile layout.
+      return;
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
         setPosition({
@@ -60,6 +61,11 @@ const OverlayMode: React.FC<OverlayModeProps> = ({ children }) => {
       });
     }
   };
+
+  // On mobile, render a normal full-page layout without the draggable overlay shell.
+  if (isMobile) {
+    return <>{children}</>;
+  }
 
   return (
     <div
