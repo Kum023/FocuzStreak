@@ -9,9 +9,30 @@ const Shop = () => {
   const { focusStats, equipHat, deductPoints, equippedHat, purchasedHats, purchaseHat } = useAppContext();
 
   const items = [
-    { id: 1, name: "Lion Hat Style 1", description: "A classic hat for your lion companion", price: 100, image: hat1, category: "Cosmetic" },
-    { id: 2, name: "Lion Hat Style 2", description: "Give your lion a stylish new look", price: 200, image: hat2, category: "Cosmetic" },
-    { id: 3, name: "Lion Hat Style 3", description: "Premium hat for your focused companion", price: 150, image: hat3, category: "Cosmetic" }
+    {
+      id: 1,
+      name: "Lion Hat Style 1",
+      description: "A classic hat for your lion companion",
+      price: 100,
+      image: hat1,
+      category: "Cosmetic"
+    },
+    {
+      id: 2,
+      name: "Lion Hat Style 2",
+      description: "Give your lion a stylish new look",
+      price: 200,
+      image: hat2,
+      category: "Cosmetic"
+    },
+    {
+      id: 3,
+      name: "Lion Hat Style 3",
+      description: "Premium hat for your focused companion",
+      price: 150,
+      image: hat3,
+      category: "Cosmetic"
+    }
   ];
 
   const handlePurchase = (item: typeof items[0]) => {

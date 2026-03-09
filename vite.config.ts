@@ -1,15 +1,14 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({
-  base: '/FocuzStreak/',
+export default defineConfig(({ mode }) => ({
+  base: mode === 'extension' ? './' : '/FocuzStreak/',
   plugins: [react()],
   build: {
     rollupOptions: {
-      input: {
-        main: 'index.html',
-        content: 'src/content.tsx'
-      },
+      input: mode === 'extension'
+        ? { main: 'index.extension.html', content: 'src/content.tsx' }
+        : { main: 'index.html', content: 'src/content.tsx' },
       output: {
         entryFileNames: '[name].js',
         chunkFileNames: '[name].js',
@@ -22,4 +21,4 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react']
   }
-});
+}));

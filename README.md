@@ -34,21 +34,26 @@ npm run dev
 npm run build:extension
 ```
 
-5. Load the extension:
-- Open Chrome/Firefox/Edge
-- Go to extensions page
-- Enable developer mode
-- Click "Load unpacked"
-- Select the `dist` folder
+5. Load the extension in Chrome:
+   - Open Chrome and go to `chrome://extensions`
+   - Turn **Developer mode** on (top-right toggle)
+   - Click **Load unpacked**
+   - Choose the **`dist`** folder inside the project (the one that contains `manifest.json`, `index.html`, `content.js`, `icon.png`)
+   - The FocuzStreak icon should appear in the toolbar; click it to open the popup.
 
-## 🌐 Live Demo
+**To run it again after code changes:** run `npm run build:extension` again, then go to `chrome://extensions` and click the refresh icon on the FocuzStreak card.
 
-**FocuzStreak is now live!** 🎉
+## 🌐 Use it directly (live)
 
-- **GitHub Pages**: [https://kum023.github.io/FocuzStreak/](https://kum023.github.io/FocuzStreak/)
-- **Repository**: [https://github.com/Kum023/FocuzStreak](https://github.com/Kum023/FocuzStreak)
+**Anyone can use FocuzStreak in the browser — no install needed.**
 
-The app automatically deploys to GitHub Pages whenever you push to the main branch!
+👉 **Live app:** [https://kum023.github.io/FocuzStreak/](https://kum023.github.io/FocuzStreak/)
+
+1. Open the link (Chrome or Edge recommended; allow camera when prompted).
+2. Wait for the model to load, then click **Start Monitoring**.
+3. Calibrate if asked, then keep your face in frame to track focus.
+
+The site deploys automatically when changes are pushed to `main`.
 
 Tech Stack
 

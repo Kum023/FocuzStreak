@@ -69,11 +69,11 @@ const OverlayMode: React.FC<OverlayModeProps> = ({ children }) => {
       </div>
       
       <div 
-        className={`bg-white rounded-b-lg shadow-xl transition-all duration-300 overflow-hidden ${
+        className={`bg-white rounded-b-lg shadow-xl transition-all duration-300 overflow-hidden flex flex-col ${
           isMinimized ? 'h-[200px]' : 'h-[600px]'
         }`}
       >
-        <div className="h-full overflow-auto">
+        <div className="flex-1 min-h-0 overflow-auto">
           {children}
         </div>
       </div>

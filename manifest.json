@@ -3,27 +3,21 @@
   "name": "FocuzStreak - AI Focus Monitor",
   "version": "1.0.0",
   "description": "AI-powered focus monitoring for better productivity",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "storage", "tabs"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
   "action": {
     "default_popup": "index.html",
     "default_icon": {
-      "16": "src/assets/focuslog.png",
-      "48": "src/assets/focuslog.png",
-      "128": "src/assets/focuslog.png"
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
     }
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["src/content.tsx"],
-      "css": ["src/index.css"]
-    }
-  ],
   "web_accessible_resources": [
     {
-      "resources": [
-        "src/assets/*"
-      ],
+      "resources": ["*.js", "*.css", "assets/*", "icon.png", "wasm/*"],
       "matches": ["<all_urls>"]
     }
   ]

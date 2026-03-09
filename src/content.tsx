@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 
@@ -9,9 +9,9 @@ const container = document.createElement('div');
 container.id = 'focuzstreak-extension-root';
 document.body.appendChild(container);
 
-// Initialize React
+// Initialize React - MemoryRouter so path is always / (host page URL would break BrowserRouter)
 createRoot(container).render(
-  <BrowserRouter>
+  <MemoryRouter initialEntries={['/']} initialIndex={0}>
     <App />
-  </BrowserRouter>
+  </MemoryRouter>
 );

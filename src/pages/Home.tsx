@@ -3,7 +3,7 @@ import { AlertCircle, Target } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import FaceMonitor from '../components/FaceMonitor';
 import Calibration from '../components/Calibration';
-import focuslogImg from '../assets/focuslog.png';
+import focusLogImg from '../assets/focuslog.png';
 
 const Home = () => {
   const { isModelLoaded, isCalibrated, setIsCalibrated } = useAppContext();
@@ -14,7 +14,7 @@ const Home = () => {
       <div className="text-center mb-8">
         <div className="flex justify-center mb-4">
           <img 
-            src={focuslogImg}
+            src={focusLogImg}
             alt="FocuzStreak"
             className="w-24 h-24"
           />

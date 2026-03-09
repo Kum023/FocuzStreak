@@ -1,24 +1,29 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Eye, BarChart2, Settings, ShoppingBag } from 'lucide-react';
+import { Eye, BarChart2, Settings, ShoppingBag, ExternalLink } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
-import focuslogImg from '../assets/focuslog.png';
+import focusLogImg from '../assets/focuslog.png';
 
 const Layout = () => {
   const location = useLocation();
   const { isModelLoaded, isMonitoring } = useAppContext();
-  
+  const isExtension = typeof chrome !== 'undefined' && chrome.runtime?.id;
+  const openFullPage = () => {
+    if (typeof chrome !== 'undefined' && chrome.tabs && chrome.runtime?.id) {
+      chrome.tabs.create({ url: chrome.runtime.getURL('index.html') });
+    }
+  };
   return (
-    <div className="min-h-screen bg-[#faaa42] flex flex-col" style={{ minWidth: '800px' }}>
-      <header className="bg-white shadow-sm">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-4">
+    <div className="min-h-screen bg-[#faaa42] flex flex-col" style={{ minWidth: isExtension ? undefined : '800px' }}>
+      <header className="bg-white shadow-sm flex-shrink-0">
+        <div className={`mx-auto px-6 py-4 flex items-center justify-between ${isExtension ? 'max-w-full' : 'container'}`}>
+          <Link to="/" className="flex items-center space-x-4 min-w-0">
             <img 
-              src={focuslogImg}
+              src={focusLogImg}
               alt="FocuzStreak"
-              className="w-10 h-10"
+              className="w-10 h-10 flex-shrink-0"
             />
-            <span className="text-xl font-bold text-black font-['Press_Start_2P']">FocuzStreak</span>
+            <span className="text-xl font-bold text-black font-['Press_Start_2P'] truncate">FocuzStreak</span>
           </Link>
           
           <div className="flex items-center space-x-4 ml-8">
@@ -37,11 +42,22 @@ const Layout = () => {
                 Monitoring Active
               </span>
             )}
+            {isExtension && (
+              <button
+                type="button"
+                onClick={openFullPage}
+                className="flex items-center gap-1 text-xs px-2 py-1.5 bg-[#faaa42] text-black rounded hover:bg-[#e99932] font-['Press_Start_2P'] whitespace-nowrap"
+                title="Open in full page"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                Full page
+              </button>
+            )}
           </div>
         </div>
       </header>
 
-      <main className="flex-grow container mx-auto px-6 py-6">
+      <main className="flex-grow min-h-0 overflow-y-auto overflow-x-hidden container mx-auto px-6 py-6">
         <Outlet />
       </main>
       
