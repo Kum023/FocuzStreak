@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { Maximize2, Minimize2, Eye } from 'lucide-react';
+import { Maximize2, Minimize2 } from 'lucide-react';
 
 interface OverlayModeProps {
   children: ReactNode;
@@ -10,6 +10,23 @@ const OverlayMode: React.FC<OverlayModeProps> = ({ children }) => {
   const [position, setPosition] = useState({ x: 20, y: 20 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth < 768);
+      }
+    };
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // On mobile, render a normal full-page layout without the draggable overlay shell.
+  if (isMobile) {
+    return <>{children}</>;
+  }
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {

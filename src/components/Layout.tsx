@@ -14,7 +14,7 @@ const Layout = () => {
     }
   };
   return (
-    <div className="min-h-screen bg-[#faaa42] flex flex-col" style={{ minWidth: isExtension ? undefined : '800px' }}>
+    <div className="min-h-screen bg-[#faaa42] flex flex-col">
       <header className="bg-white shadow-sm flex-shrink-0">
         <div className={`mx-auto px-6 py-4 flex items-center justify-between ${isExtension ? 'max-w-full' : 'container'}`}>
           <Link to="/" className="flex items-center space-x-4 min-w-0">
