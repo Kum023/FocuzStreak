@@ -44,8 +44,10 @@ const FaceMeshOverlay: React.FC = () => {
 
         const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
         const detector = await faceLandmarksDetection.createDetector(model, {
-          runtime: 'mediapipe',
-          solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh',
+          // Use the pure TensorFlow.js runtime so we don't depend on the
+          // separate MediaPipe FaceMesh JS constructor (which was causing
+          // "FaceMesh is not a constructor" in the browser build).
+          runtime: 'tfjs',
           refineLandmarks: true,
         });
         if (!mounted) {
