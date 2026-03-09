@@ -16,17 +16,19 @@ const Layout = () => {
   return (
     <div className="min-h-screen bg-[#faaa42] flex flex-col">
       <header className="bg-white shadow-sm flex-shrink-0">
-        <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-4 min-w-0">
+        <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Link to="/" className="flex items-center space-x-3 min-w-0">
             <img 
               src={focusLogImg}
               alt="FocuzStreak"
               className="w-10 h-10 flex-shrink-0"
             />
-            <span className="text-xl font-bold text-black font-['Press_Start_2P'] truncate">FocuzStreak</span>
+            <span className="text-lg sm:text-xl font-bold text-black font-['Press_Start_2P']">
+              FocuzStreak
+            </span>
           </Link>
           
-          <div className="flex items-center space-x-4 ml-8">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 sm:ml-8">
             {isModelLoaded ? (
               <span className="text-xs px-3 py-1 bg-green-100 text-green-800 rounded-full font-['Press_Start_2P'] whitespace-nowrap">
                 Model Ready
@@ -66,47 +68,47 @@ const Layout = () => {
           <nav className="flex justify-between">
             <Link
               to="/"
-              className={`py-4 px-8 flex flex-col items-center transition-colors font-['Press_Start_2P'] ${
+              className={`flex-1 py-3 px-2 sm:px-4 md:px-6 flex flex-col items-center transition-colors font-['Press_Start_2P'] text-[10px] ${
                 location.pathname === '/' 
                   ? 'text-[#faaa42] border-t-2 border-[#faaa42]' 
                   : 'text-gray-500 hover:text-[#faaa42]'
               }`}
             >
               <Eye className="w-5 h-5" />
-              <span className="text-[10px] mt-2">Monitor</span>
+              <span className="mt-1">Monitor</span>
             </Link>
             <Link
               to="/dashboard"
-              className={`py-4 px-8 flex flex-col items-center transition-colors font-['Press_Start_2P'] ${
+              className={`flex-1 py-3 px-2 sm:px-4 md:px-6 flex flex-col items-center transition-colors font-['Press_Start_2P'] text-[10px] ${
                 location.pathname === '/dashboard' 
                   ? 'text-[#faaa42] border-t-2 border-[#faaa42]' 
                   : 'text-gray-500 hover:text-[#faaa42]'
               }`}
             >
               <BarChart2 className="w-5 h-5" />
-              <span className="text-[10px] mt-2">Stats</span>
+              <span className="mt-1">Stats</span>
             </Link>
             <Link
               to="/shop"
-              className={`py-4 px-8 flex flex-col items-center transition-colors font-['Press_Start_2P'] ${
+              className={`flex-1 py-3 px-2 sm:px-4 md:px-6 flex flex-col items-center transition-colors font-['Press_Start_2P'] text-[10px] ${
                 location.pathname === '/shop' 
                   ? 'text-[#faaa42] border-t-2 border-[#faaa42]' 
                   : 'text-gray-500 hover:text-[#faaa42]'
               }`}
             >
               <ShoppingBag className="w-5 h-5" />
-              <span className="text-[10px] mt-2">Shop</span>
+              <span className="mt-1">Shop</span>
             </Link>
             <Link
               to="/settings"
-              className={`py-4 px-8 flex flex-col items-center transition-colors font-['Press_Start_2P'] ${
+              className={`flex-1 py-3 px-2 sm:px-4 md:px-6 flex flex-col items-center transition-colors font-['Press_Start_2P'] text-[10px] ${
                 location.pathname === '/settings' 
                   ? 'text-[#faaa42] border-t-2 border-[#faaa42]' 
                   : 'text-gray-500 hover:text-[#faaa42]'
               }`}
             >
               <Settings className="w-5 h-5" />
-              <span className="text-[10px] mt-2">Settings</span>
+              <span className="mt-1">Settings</span>
             </Link>
           </nav>
         </div>
