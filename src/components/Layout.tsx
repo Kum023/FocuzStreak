@@ -16,7 +16,7 @@ const Layout = () => {
   return (
     <div className="min-h-screen bg-[#faaa42] flex flex-col">
       <header className="bg-white shadow-sm flex-shrink-0">
-        <div className={`mx-auto px-6 py-4 flex items-center justify-between ${isExtension ? 'max-w-full' : 'container'}`}>
+        <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-4 min-w-0">
             <img 
               src={focusLogImg}
@@ -57,12 +57,12 @@ const Layout = () => {
         </div>
       </header>
 
-      <main className="flex-grow min-h-0 overflow-y-auto overflow-x-hidden container mx-auto px-6 py-6">
+      <main className="flex-grow min-h-0 overflow-y-auto overflow-x-hidden w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         <Outlet />
       </main>
       
       <footer className="bg-white shadow-inner">
-        <div className="container mx-auto px-6">
+        <div className="w-full max-w-5xl mx-auto px-4 sm:px-6">
           <nav className="flex justify-between">
             <Link
               to="/"
